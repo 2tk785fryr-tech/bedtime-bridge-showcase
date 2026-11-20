@@ -1,0 +1,618 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Waking Up Survey</title>
+<meta name="description" content="A 3-minute anonymous survey about work schedules and alarms, for the Bedtime Bridge alarm app.">
+<meta name="theme-color" content="#0B1026">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;700&display=swap" rel="stylesheet">
+<style>:root {
+  --ground: #0B1026; --surface: #141B3A; --raised: #1C2550; --border: #2A3366;
+  --text: #EEF0FF; --soft: #C9CEEA; --muted: #A9B1D6; --faint: #8F98C4;
+  --accent: #6D4AFF; --accent-2: #8B5CF6; --accent-text: #DDD6FE; --accent-icon: #C4B5FD;
+  --leave: #60A5FA; --good: #7DE3C8; --amber: #FBBF24; --snooze: #FDE047; --nap: #FF7A3D;
+  --radius: 22px;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0; background: var(--ground); color: var(--text);
+  font-family: "Sora", system-ui, -apple-system, "Segoe UI", sans-serif;
+  line-height: 1.6; -webkit-font-smoothing: antialiased; overflow-x: hidden;
+}
+a { color: var(--accent-text); }
+img, svg { max-width: 100%; }
+
+/* ---------- Night sky background ---------- */
+.sky {
+  position: relative; isolation: isolate;
+  background:
+    radial-gradient(1200px 600px at 75% -10%, rgba(109,74,255,.35), transparent 60%),
+    radial-gradient(900px 500px at 0% 30%, rgba(96,165,250,.12), transparent 60%),
+    linear-gradient(180deg, #1C2550 0%, #0B1026 70%);
+}
+.sky::before {
+  content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none;
+  background-image:
+    radial-gradient(1.6px 1.6px at 12% 18%, #fff 50%, transparent 51%),
+    radial-gradient(1.2px 1.2px at 28% 62%, #C4B5FD 50%, transparent 51%),
+    radial-gradient(1.4px 1.4px at 44% 12%, #fff 50%, transparent 51%),
+    radial-gradient(1px 1px at 58% 40%, #A9B1D6 50%, transparent 51%),
+    radial-gradient(1.8px 1.8px at 71% 22%, #fff 50%, transparent 51%),
+    radial-gradient(1.1px 1.1px at 83% 70%, #C4B5FD 50%, transparent 51%),
+    radial-gradient(1.3px 1.3px at 92% 35%, #fff 50%, transparent 51%),
+    radial-gradient(1px 1px at 6% 80%, #A9B1D6 50%, transparent 51%),
+    radial-gradient(1.5px 1.5px at 36% 88%, #fff 50%, transparent 51%),
+    radial-gradient(1px 1px at 65% 85%, #C4B5FD 50%, transparent 51%);
+  opacity: .8;
+}
+.horizon {
+  position: absolute; left: 0; right: 0; bottom: -1px; height: 120px; z-index: -1;
+  background: radial-gradient(120% 120px at 50% 120px, var(--ground) 70%, transparent 71%);
+}
+
+/* ---------- Layout ---------- */
+.wrap { max-width: 1120px; margin: 0 auto; padding: 0 24px; }
+section { padding: 96px 0; }
+section.tight { padding: 64px 0; }
+.alt { background: linear-gradient(180deg, var(--ground), #10173A 50%, var(--ground)); }
+.eyebrow {
+  display: inline-block; font-size: .78rem; letter-spacing: .14em; text-transform: uppercase;
+  color: var(--accent-icon); font-weight: 600; margin-bottom: 12px;
+}
+h1, h2, h3 { line-height: 1.15; margin: 0 0 16px; letter-spacing: -.02em; }
+h1 { font-size: clamp(2.4rem, 6vw, 4.2rem); font-weight: 700; }
+h2 { font-size: clamp(1.8rem, 4vw, 2.6rem); font-weight: 650; }
+h3 { font-size: 1.2rem; font-weight: 600; }
+p { margin: 0 0 16px; color: var(--soft); }
+.lead { font-size: clamp(1.05rem, 2.2vw, 1.3rem); color: var(--soft); max-width: 640px; }
+.center { text-align: center; }
+.center .lead { margin-left: auto; margin-right: auto; }
+.muted { color: var(--muted); }
+.small { font-size: .9rem; }
+.motto {
+  font-weight: 600; background: linear-gradient(90deg, #DDD6FE, #8B5CF6 60%, #60A5FA);
+  -webkit-background-clip: text; background-clip: text; color: transparent;
+}
+
+/* ---------- Nav ---------- */
+nav.top {
+  position: sticky; top: 0; z-index: 50; backdrop-filter: blur(14px);
+  background: rgba(11,16,38,.72); border-bottom: 1px solid rgba(42,51,102,.6);
+}
+nav.top .wrap { display: flex; align-items: center; gap: 20px; height: 64px; }
+nav.top .brand { display: flex; align-items: center; gap: 10px; font-weight: 650; color: var(--text); text-decoration: none; }
+nav.top .brand svg { width: 32px; height: 32px; border-radius: 8px; }
+nav.top .links { margin-left: auto; display: flex; gap: 22px; }
+nav.top .links a { color: var(--muted); text-decoration: none; font-size: .92rem; }
+nav.top .links a:hover { color: var(--text); }
+@media (max-width: 720px) { nav.top .links { display: none; } }
+
+/* ---------- Buttons ---------- */
+.btns { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 28px; }
+.center .btns { justify-content: center; }
+.btn {
+  display: inline-flex; align-items: center; gap: 8px; padding: 13px 22px; border-radius: 999px;
+  font-weight: 600; text-decoration: none; font-size: .98rem; transition: transform .15s, box-shadow .15s;
+}
+.btn:hover { transform: translateY(-1px); }
+.btn.primary { background: var(--accent); color: #fff; box-shadow: 0 10px 30px rgba(109,74,255,.45); }
+.btn.ghost { border: 1.5px solid rgba(109,74,255,.75); color: var(--accent-text); }
+.btn.sm { padding: 8px 14px; font-size: .86rem; }
+.btn.disabled { opacity: .45; pointer-events: none; }
+
+/* ---------- Hero ---------- */
+.hero { padding: 72px 0 140px; }
+.hero .grid { display: grid; grid-template-columns: 1.1fr .9fr; gap: 48px; align-items: center; }
+.hero .appicon { width: 84px; height: 84px; border-radius: 20px; box-shadow: 0 18px 50px rgba(109,74,255,.45); margin-bottom: 24px; }
+@media (max-width: 900px) { .hero .grid { grid-template-columns: 1fr; } .hero { padding-bottom: 110px; } }
+
+/* ---------- Cards and grids ---------- */
+.grid2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
+.grid3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+.grid4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+@media (max-width: 900px) { .grid3, .grid4 { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 620px) { .grid2, .grid3, .grid4 { grid-template-columns: 1fr; } }
+.card {
+  background: linear-gradient(180deg, rgba(28,37,80,.85), rgba(20,27,58,.85));
+  border: 1px solid var(--border); border-radius: var(--radius); padding: 26px;
+}
+.card p:last-child { margin-bottom: 0; }
+.card .ico {
+  width: 44px; height: 44px; border-radius: 12px; display: grid; place-items: center; margin-bottom: 16px;
+  background: rgba(109,74,255,.18); color: var(--accent-icon); font-size: 1.35rem;
+}
+.card.hl { border-color: rgba(109,74,255,.8); box-shadow: 0 0 0 1px rgba(109,74,255,.35), 0 20px 50px rgba(109,74,255,.2); }
+.tag {
+  display: inline-block; font-size: .72rem; font-weight: 600; padding: 3px 10px; border-radius: 999px;
+  background: rgba(109,74,255,.22); color: var(--accent-text); margin-bottom: 12px; letter-spacing: .04em;
+}
+.tag.good { background: rgba(125,227,200,.15); color: var(--good); }
+.tag.amber { background: rgba(251,191,36,.15); color: var(--amber); }
+ul.ticks { list-style: none; padding: 0; margin: 0; }
+ul.ticks li { padding-left: 26px; position: relative; margin: 8px 0; color: var(--soft); }
+ul.ticks li::before { content: "✓"; position: absolute; left: 0; color: var(--good); font-weight: 700; }
+ul.ticks.minus li::before { content: "–"; color: var(--faint); }
+
+/* ---------- Split sections ---------- */
+.split { display: grid; grid-template-columns: 1fr 1fr; gap: 56px; align-items: center; }
+.split.rev > :first-child { order: 2; }
+@media (max-width: 900px) { .split { grid-template-columns: 1fr; gap: 36px; } .split.rev > :first-child { order: 0; } }
+.num {
+  width: 40px; height: 40px; border-radius: 50%; display: grid; place-items: center; font-weight: 700;
+  background: var(--accent); color: #fff; margin-bottom: 16px;
+}
+
+/* ---------- Phone mockup ---------- */
+.phones { position: relative; display: flex; justify-content: center; gap: 22px; }
+.phone {
+  width: 260px; aspect-ratio: 9 / 19.5; border-radius: 44px; padding: 10px; flex: none;
+  background: linear-gradient(145deg, #3a4170, #151a36); box-shadow: 0 40px 80px rgba(0,0,0,.55), 0 0 0 1px #4a5290 inset;
+}
+.phone .screen {
+  height: 100%; border-radius: 35px; overflow: hidden; position: relative;
+  background: linear-gradient(180deg, #1C2550, #0B1026 75%); padding: 46px 18px 18px; font-size: 13px;
+}
+.phone .screen::before {
+  content: ""; position: absolute; top: 12px; left: 50%; transform: translateX(-50%);
+  width: 92px; height: 26px; border-radius: 20px; background: #000;
+}
+.phone.tilt-l { transform: rotate(-6deg) translateY(28px); }
+.phone.tilt-r { transform: rotate(5deg); }
+@media (max-width: 620px) { .phone { width: 210px; } .phone.tilt-l { display: none; } .phone.tilt-r { transform: none; } }
+.ui-time { font-size: 3.6em; font-weight: 300; text-align: center; letter-spacing: -.03em; line-height: 1; margin-top: 18px; }
+.ui-date { text-align: center; color: var(--muted); font-size: .95em; }
+.ui-label { color: var(--muted); font-size: .82em; text-transform: uppercase; letter-spacing: .1em; margin: 14px 0 6px; }
+.ui-card { background: rgba(28,37,80,.9); border: 1px solid var(--border); border-radius: 16px; padding: 12px 14px; margin-bottom: 10px; }
+.ui-row { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+.ui-chip { font-size: .78em; padding: 2px 9px; border-radius: 999px; background: #2B1F5C; color: #DDD6FE; font-weight: 600; }
+.ui-chip.blue { background: #13305A; color: #BFDBFE; }
+.ui-big { font-size: 1.7em; font-weight: 600; }
+.ui-dot { width: 9px; height: 9px; border-radius: 50%; display: inline-block; margin-right: 6px; }
+.ui-alarm {
+  position: absolute; left: 14px; right: 14px; bottom: 26px; display: grid; gap: 10px;
+}
+.ui-slide {
+  height: 56px; border-radius: 999px; background: rgba(255,255,255,.12); display: flex; align-items: center;
+  padding: 5px; color: var(--soft); font-size: .95em;
+}
+.ui-slide b { width: 46px; height: 46px; border-radius: 50%; background: #fff; color: var(--ground); display: grid; place-items: center; margin-right: 18px; font-size: 1.2em; }
+.ui-snooze { height: 50px; border-radius: 999px; background: var(--accent); color: #fff; display: grid; place-items: center; font-weight: 600; }
+.ui-island {
+  position: absolute; top: 10px; left: 50%; transform: translateX(-50%); width: 170px; height: 34px;
+  border-radius: 20px; background: #000; display: flex; align-items: center; justify-content: space-between;
+  padding: 0 12px; font-size: .82em; color: var(--snooze); font-weight: 600; z-index: 2;
+}
+.shot {
+  border: 1.5px dashed rgba(169,177,214,.4); border-radius: 18px; padding: 22px; text-align: center;
+  color: var(--faint); font-size: .88rem; background: rgba(20,27,58,.5);
+}
+
+/* ---------- Steps, tables, code ---------- */
+.steps { counter-reset: s; display: grid; gap: 14px; }
+.step { position: relative; padding: 18px 20px 18px 66px; background: rgba(20,27,58,.7); border: 1px solid var(--border); border-radius: 18px; }
+.step::before {
+  counter-increment: s; content: counter(s); position: absolute; left: 18px; top: 16px;
+  width: 32px; height: 32px; border-radius: 50%; background: var(--accent); color: #fff;
+  display: grid; place-items: center; font-weight: 700; font-size: .9rem;
+}
+.step p { margin: 0; }
+.step b { color: var(--text); }
+code, .kbd {
+  font-family: ui-monospace, "SF Mono", Menlo, monospace; font-size: .86em; background: rgba(109,74,255,.18);
+  color: var(--accent-text); padding: 2px 7px; border-radius: 6px; word-break: break-word;
+}
+.table { width: 100%; border-collapse: separate; border-spacing: 0; border: 1px solid var(--border); border-radius: 18px; overflow: hidden; }
+.table th, .table td { text-align: left; padding: 14px 16px; border-bottom: 1px solid var(--border); vertical-align: top; font-size: .95rem; }
+.table th { background: var(--raised); color: var(--text); font-weight: 600; }
+.table td { color: var(--soft); background: rgba(20,27,58,.6); }
+.table tr:last-child td { border-bottom: 0; }
+.table td:first-child { color: var(--text); font-weight: 600; white-space: nowrap; }
+.tablewrap { overflow-x: auto; }
+@media (max-width: 620px) { .table td:first-child { white-space: normal; } }
+
+/* ---------- Footer ---------- */
+footer { padding: 56px 0 48px; border-top: 1px solid var(--border); color: var(--faint); font-size: .9rem; }
+footer .wrap { display: flex; flex-wrap: wrap; gap: 18px; align-items: center; justify-content: space-between; }
+footer a { color: var(--muted); text-decoration: none; margin-left: 18px; }
+footer a:first-child { margin-left: 0; }
+.appicon { overflow: hidden; }
+.appicon svg, nav.top .brand svg { display: block; width: 100%; height: 100%; }
+nav.top .brand span.i { width: 32px; height: 32px; border-radius: 8px; overflow: hidden; flex: none; }
+
+/* =================== Motion =================== */
+/* Twinkling star layers and a shooting star over every night-sky section */
+.sky::after {
+  content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none;
+  background-image:
+    radial-gradient(1.4px 1.4px at 20% 30%, #fff 50%, transparent 51%),
+    radial-gradient(1.2px 1.2px at 52% 18%, #DDD6FE 50%, transparent 51%),
+    radial-gradient(1.6px 1.6px at 78% 48%, #fff 50%, transparent 51%),
+    radial-gradient(1px 1px at 33% 75%, #fff 50%, transparent 51%),
+    radial-gradient(1.3px 1.3px at 88% 12%, #C4B5FD 50%, transparent 51%),
+    radial-gradient(1.1px 1.1px at 8% 55%, #fff 50%, transparent 51%);
+  animation: twinkle 4.5s ease-in-out infinite alternate;
+}
+.sky::before { animation: twinkle 6s ease-in-out infinite alternate-reverse; }
+@keyframes twinkle { from { opacity: .25; } to { opacity: 1; } }
+.shooting {
+  position: absolute; top: 12%; left: -10%; width: 160px; height: 2px; z-index: -1; pointer-events: none;
+  background: linear-gradient(90deg, transparent, rgba(221,214,254,.95));
+  border-radius: 2px; transform: rotate(-18deg); opacity: 0;
+  animation: shoot 9s ease-in 2s infinite;
+}
+.shooting.b { top: 28%; animation-delay: 6.5s; animation-duration: 11s; }
+@keyframes shoot {
+  0% { transform: translate(0, 0) rotate(-18deg); opacity: 0; }
+  2% { opacity: 1; }
+  10% { transform: translate(85vw, 28vh) rotate(-18deg); opacity: 0; }
+  100% { opacity: 0; }
+}
+/* A slow glow behind the hero phones */
+.phones::before {
+  content: ""; position: absolute; inset: 10% 5%; z-index: -1; border-radius: 50%;
+  background: radial-gradient(closest-side, rgba(109,74,255,.45), transparent);
+  filter: blur(30px); animation: breathe 6s ease-in-out infinite;
+}
+@keyframes breathe { 0%,100% { opacity: .55; transform: scale(.95); } 50% { opacity: 1; transform: scale(1.05); } }
+/* Floating phones */
+.float { animation: float 7s ease-in-out infinite; }
+.float.slow { animation-duration: 9s; animation-delay: -3s; }
+@keyframes float { 0%,100% { translate: 0 0; } 50% { translate: 0 -14px; } }
+/* The motto's gradient drifts */
+.motto { background-size: 200% 100%; animation: drift 8s ease-in-out infinite alternate; }
+@keyframes drift { from { background-position: 0% 50%; } to { background-position: 100% 50%; } }
+/* Icon glow */
+.appicon { animation: iconglow 5s ease-in-out infinite; }
+@keyframes iconglow { 0%,100% { box-shadow: 0 18px 50px rgba(109,74,255,.35); } 50% { box-shadow: 0 18px 70px rgba(109,74,255,.7); } }
+
+/* Scroll reveal (added by the script) */
+.reveal { opacity: 0; transform: translateY(28px); transition: opacity .8s ease, transform .8s cubic-bezier(.2,.7,.2,1); }
+.reveal.in { opacity: 1; transform: none; }
+
+/* Rotating word in a headline */
+.rotate { display: inline-block; position: relative; color: var(--accent-icon); min-width: 2ch; }
+.rotate .w { display: inline-block; animation: wordin .5s cubic-bezier(.2,.7,.2,1); }
+@keyframes wordin { from { opacity: 0; transform: translateY(.4em); filter: blur(4px); } to { opacity: 1; transform: none; filter: none; } }
+
+/* The ringing alarm */
+.ringing .ui-time { animation: ringpulse 1.4s ease-in-out infinite; }
+@keyframes ringpulse { 0%,100% { text-shadow: 0 0 0 rgba(196,181,253,0); } 50% { text-shadow: 0 0 24px rgba(196,181,253,.8); } }
+.ring-waves { position: relative; height: 120px; display: grid; place-items: center; margin-top: 10px; }
+.ring-waves span {
+  position: absolute; width: 56px; height: 56px; border-radius: 50%; border: 2px solid rgba(139,92,246,.8);
+  animation: wave 2.4s ease-out infinite;
+}
+.ring-waves span:nth-child(2) { animation-delay: .8s; }
+.ring-waves span:nth-child(3) { animation-delay: 1.6s; }
+.ring-waves b { font-size: 26px; animation: wiggle 1.2s ease-in-out infinite; }
+@keyframes wave { from { transform: scale(.6); opacity: 1; } to { transform: scale(2.4); opacity: 0; } }
+@keyframes wiggle { 0%,100% { rotate: 0deg; } 10% { rotate: -14deg; } 20% { rotate: 12deg; } 30% { rotate: -8deg; } 40% { rotate: 0deg; } }
+.ui-slide { position: relative; overflow: hidden; }
+.ui-slide::after {
+  content: ""; position: absolute; inset: 0; transform: translateX(-100%);
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,.22), transparent);
+  animation: shimmer 2.6s ease-in-out infinite;
+}
+@keyframes shimmer { to { transform: translateX(100%); } }
+.ui-slide b { animation: nudge 2.6s ease-in-out infinite; position: relative; z-index: 1; }
+@keyframes nudge { 0%,60%,100% { translate: 0 0; } 75% { translate: 26px 0; } }
+
+/* Alarm series lighting up one by one */
+.series { display: flex; gap: 6px; margin-top: 8px; }
+.series i {
+  flex: 1; height: 6px; border-radius: 4px; background: rgba(109,74,255,.25);
+  animation: seriesOn 4s ease-in-out infinite;
+}
+.series i:nth-child(2) { animation-delay: .5s; } .series i:nth-child(3) { animation-delay: 1s; }
+.series i:nth-child(4) { animation-delay: 1.5s; } .series i:nth-child(5) { animation-delay: 2s; }
+@keyframes seriesOn { 0%,10% { background: rgba(109,74,255,.25); } 20%,70% { background: #8B5CF6; box-shadow: 0 0 10px #8B5CF6; } 85%,100% { background: rgba(109,74,255,.25); } }
+
+/* Backstop ladder steps lighting in turn */
+.ladder > * { animation: rung 6s ease-in-out infinite; }
+.ladder > :nth-child(2) { animation-delay: 2s; }
+.ladder > :nth-child(3) { animation-delay: 4s; }
+@keyframes rung { 0%,5% { border-color: var(--border); box-shadow: none; } 12%,30% { border-color: rgba(251,191,36,.9); box-shadow: 0 0 22px rgba(251,191,36,.35); } 40%,100% { border-color: var(--border); box-shadow: none; } }
+
+/* A tick that draws itself */
+.pop { animation: pop 2.8s ease-in-out infinite; display: inline-block; }
+@keyframes pop { 0%,60%,100% { transform: scale(1); } 70% { transform: scale(1.5); } 80% { transform: scale(.9); } }
+
+/* Cards lift and glow under the pointer */
+.card { transition: transform .35s cubic-bezier(.2,.7,.2,1), border-color .35s, box-shadow .35s; }
+@media (hover: hover) {
+  .card:hover { transform: translateY(-4px); border-color: rgba(109,74,255,.7); box-shadow: 0 18px 50px rgba(0,0,0,.35), 0 0 0 1px rgba(109,74,255,.25); }
+}
+.btn.primary { position: relative; overflow: hidden; }
+.btn.primary::after {
+  content: ""; position: absolute; inset: 0; transform: translateX(-120%);
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,.35), transparent);
+  animation: shimmer 3.5s ease-in-out 1s infinite;
+}
+
+/* Nav darkens once you scroll */
+nav.top { transition: background .3s, box-shadow .3s; }
+nav.top.scrolled { background: rgba(11,16,38,.92); box-shadow: 0 8px 30px rgba(0,0,0,.35); }
+
+/* Typed Shortcuts word */
+.typed::after { content: "▍"; color: var(--accent-icon); animation: blink 1s steps(2) infinite; margin-left: 1px; }
+@keyframes blink { 50% { opacity: 0; } }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+  .reveal { opacity: 1; transform: none; }
+}
+.ladder .ui-card { margin-bottom: 0; }
+
+.survey { max-width: 720px; margin: 0 auto; }
+.survey .card { margin-bottom: 16px; padding: 22px 22px 18px; }
+.survey h3 { font-size: 1.05rem; font-weight: 600; margin: 0 0 12px; line-height: 1.35; }
+.survey h3 .opt { color: var(--faint); font-weight: 400; font-size: .85rem; margin-left: 6px; }
+.survey .hint { color: var(--faint); font-size: .82rem; margin: -6px 0 10px; }
+.secthead { margin: 36px 0 12px; }
+.choices { display: flex; flex-wrap: wrap; gap: 8px; }
+.choice { position: relative; }
+.choice input { position: absolute; opacity: 0; pointer-events: none; }
+.choice span {
+  display: inline-block; padding: 9px 15px; border-radius: 999px; cursor: pointer; font-size: .92rem;
+  border: 1.5px solid var(--border); background: var(--raised); color: var(--soft);
+  transition: background .15s, border-color .15s, color .15s;
+}
+.choice input:focus-visible + span { outline: 2px solid var(--accent-icon); outline-offset: 2px; }
+.choice input:checked + span { background: var(--accent); border-color: var(--accent); color: #fff; }
+.survey input[type=text], .survey input[type=email], .survey textarea {
+  width: 100%; font: inherit; color: var(--text); background: var(--raised);
+  border: 1.5px solid var(--border); border-radius: 14px; padding: 11px 14px;
+}
+.survey textarea { min-height: 96px; resize: vertical; }
+.survey input:focus, .survey textarea:focus { outline: none; border-color: var(--accent); }
+.other-text { margin-top: 10px; display: none; }
+.other-text.on { display: block; }
+.card.missing { border-color: var(--nap); }
+.card.missing h3::after { content: "  Please pick one"; color: var(--nap); font-size: .8rem; font-weight: 400; }
+.submitrow { display: flex; flex-wrap: wrap; align-items: center; gap: 14px; margin: 28px 0 8px; }
+.submitrow .muted { font-size: .85rem; }
+.done { text-align: center; padding: 48px 22px; }
+.done h2 { margin-bottom: 8px; }
+.progress { position: sticky; top: 64px; z-index: 5; height: 4px; background: var(--surface); }
+.progress i { display: block; height: 100%; width: 0; background: var(--accent); transition: width .25s; }
+@media (max-width: 640px) { nav.top .links { display: none; } .survey .card { padding: 18px 16px 14px; } }
+</style>
+</head>
+<body>
+<nav class="top"><div class="wrap">
+  <a class="brand" href="./"><span class="i"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024">
+  
+  <defs>
+    <linearGradient id="sky0" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#1C2550"/>
+      <stop offset="1" stop-color="#0B1026"/>
+    </linearGradient>
+    <mask id="cut0">
+      <rect width="1024" height="1024" fill="#FFFFFF"/>
+      <circle cx="610" cy="390" r="250" fill="#000000"/>
+    </mask>
+  </defs>
+  <rect width="1024" height="1024" fill="url(#sky0)"/>
+  <circle cx="198" cy="214" r="10" fill="#C4B5FD"/>
+  <circle cx="820" cy="760" r="8" fill="#C4B5FD" opacity="0.8"/>
+  <circle cx="300" cy="840" r="6" fill="#A9B1D6" opacity="0.7"/>
+  <circle cx="470" cy="520" r="290" fill="#DDD6FE" mask="url(#cut0)"/>
+  <path d="M 690 300 A 230 230 0 0 1 760 470" fill="none" stroke="#8B5CF6" stroke-width="34" stroke-linecap="round"/>
+  <path d="M 745 215 A 340 340 0 0 1 860 480" fill="none" stroke="#8B5CF6" stroke-width="34" stroke-linecap="round" opacity="0.6"/>
+</svg>
+</span>Bedtime Bridge</a>
+  <div class="links"><a href="./">The app</a></div>
+</div></nav>
+<div class="progress" aria-hidden="true"><i id="bar"></i></div>
+
+<header class="sky hero" style="padding:64px 0 40px"><div class="wrap survey">
+  <span class="eyebrow">3–4 minutes · anonymous</span>
+  <h1 style="font-size:clamp(2rem,5vw,3rem)">How do you wake up for work?</h1>
+  <p class="lead">Hi! I'm building Bedtime Bridge, an iPhone alarm app that sets your alarms from your work
+  schedule, so you don't have to. Your answers help it fit how real people work, whether that's
+  Mon–Fri, rotating shifts, duty days or something else. Thanks for helping! — Michael</p>
+</div></header>
+
+<section style="padding-top:24px"><div class="wrap survey">
+  <form id="survey" novalidate></form>
+  <div id="done" class="card done" hidden>
+    <div class="appicon" style="width:64px;height:64px;margin:0 auto 18px;border-radius:16px;overflow:hidden"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024">
+  
+  <defs>
+    <linearGradient id="sky1" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#1C2550"/>
+      <stop offset="1" stop-color="#0B1026"/>
+    </linearGradient>
+    <mask id="cut1">
+      <rect width="1024" height="1024" fill="#FFFFFF"/>
+      <circle cx="610" cy="390" r="250" fill="#000000"/>
+    </mask>
+  </defs>
+  <rect width="1024" height="1024" fill="url(#sky1)"/>
+  <circle cx="198" cy="214" r="10" fill="#C4B5FD"/>
+  <circle cx="820" cy="760" r="8" fill="#C4B5FD" opacity="0.8"/>
+  <circle cx="300" cy="840" r="6" fill="#A9B1D6" opacity="0.7"/>
+  <circle cx="470" cy="520" r="290" fill="#DDD6FE" mask="url(#cut1)"/>
+  <path d="M 690 300 A 230 230 0 0 1 760 470" fill="none" stroke="#8B5CF6" stroke-width="34" stroke-linecap="round"/>
+  <path d="M 745 215 A 340 340 0 0 1 860 480" fill="none" stroke="#8B5CF6" stroke-width="34" stroke-linecap="round" opacity="0.6"/>
+</svg>
+</div>
+    <h2>Thanks! That really helps.</h2>
+    <p class="muted">Your answers were sent. You can close this page.</p>
+    <a class="btn ghost" href="./">See the app</a>
+  </div>
+</div></section>
+
+<footer><div class="wrap">
+  <span>Bedtime Bridge</span>
+  <span><a href="./">The app</a><a href="https://2tk785fryr-tech.github.io/bedtime-bridge-shortcuts/">Shortcuts</a><a href="https://2tk785fryr-tech.github.io/bedtime-bridge-homeassistant/">Home Assistant</a></span>
+</div></footer>
+
+<script>
+(() => {
+  // Answers go to the Google Form behind this page (docs/ideas/survey.md). Entry ids come from that form.
+  const POST = "https://docs.google.com/forms/d/e/1FAIpQLSeQiQVKIsolWN2azYigd1bK5bdeF9W5zx_1jzlMSAFSt0iiUQ/formResponse";
+  const FORM = "https://docs.google.com/forms/d/e/1FAIpQLSeQiQVKIsolWN2azYigd1bK5bdeF9W5zx_1jzlMSAFSt0iiUQ/viewform";
+  // [section, entry id, type (one/any/long/email), question, choices, has "Other", required]
+  const Q = [
+    ["About your work"],
+    [1945899248, "one", "Which best describes your schedule?", ["Same days and times every week (for example Mon–Fri, 8–5)", "Rotating shifts (days, swings, nights on a cycle)", "Fixed days plus on-call or duty days", "Mix of office, home and travel days", "Changes week to week (schedule posted ahead)"], true],
+    [323043069, "one", "Does your start time change?", ["Never", "Sometimes", "Often", "Every week"]],
+    [1811839842, "one", "How far ahead do you usually know about a change?", ["Same day", "A few days", "About a week", "Weeks or more"]],
+    [552368032, "one", "Do you get holidays off?", ["Yes", "No", "Some", "It changes year to year"]],
+    [1072569302, "one", "Do you ever work overnight or start before 5 AM?", ["Never", "Sometimes", "Regularly"]],
+    ["Calendar"],
+    [1098881560, "one", "Is your work schedule on your phone's calendar?", ["Yes, all of it", "Some of it", "No"]],
+    [891655920, "one", "If an app could fill your work schedule in for you, would you let it?", ["Yes", "Maybe", "No, I'd rather enter it myself in the app"]],
+    [58081462, "any", "What else goes on your calendar that affects when you wake up?", ["Appointments", "Flights/travel", "Kids' drop-off or pick-up", "Gym", "Nothing"], true],
+    ["Alarms"],
+    [83045876, "one", "How many alarms do you usually set for one morning?", ["1", "2–3", "4 or more"]],
+    [1522661858, "one", "Do you snooze?", ["Never", "Sometimes", "Every time"]],
+    [601294807, "one", "In the last year, have you slept through an alarm or fallen back asleep after turning it off?", ["Never", "Once or twice", "Several times"]],
+    [397488270, "any", "How do you set alarms now?", ["iPhone Clock app", "Another alarm app", "Smart speaker", "Physical alarm clock", "Someone wakes me"]],
+    [302032328, "one", "Do you change your alarms when your schedule changes, or leave them on all the time?", ["Change them each time", "Mostly leave them on", "Mix"]],
+    ["Getting to work"],
+    [836916917, "any", "How do you get to work?", ["Drive", "Train/bus", "Walk/bike", "Work from home", "Mix"]],
+    [1285716096, "one", "Do you plan your wake-up around traffic or the commute?", ["Yes", "Sometimes", "No"]],
+    ["Home"],
+    [1987481627, "one", "Do you use a smart home system?", ["Home Assistant", "Apple Home", "Google Home", "Alexa", "None"], true],
+    [2007963723, "one", "Would you want your lights or thermostat tied to your bedtime and wake-up?", ["Yes", "Maybe", "No"]],
+    ["Setup"],
+    [1324652536, "any", "What makes you give up on setting up a new app?", ["Too many permission prompts", "Too many questions", "Unclear words", "Takes too long", "Needs another account"], true],
+    [1464363505, "long", "Anything else about waking up for work you wish an app did?", null, false, false],
+    ["Optional: about you"],
+    [1130456777, "one", "What kind of work do you do?", ["Military", "Healthcare", "Police/fire/EMS", "Manufacturing/plant", "Retail/food service", "Transportation/logistics", "Office/tech", "Student"], true, false],
+    [1241104736, "one", "Age range", ["Under 18", "18–24", "25–34", "35–44", "45–54", "55+"], false, false],
+    [957056039, "email", "Want to try the beta? Leave an email.", null, false, false, "Optional. Only used to send you a beta invite, never shared."],
+  ];
+  const form = document.getElementById("survey");
+  const esc = s => s.replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+  let n = 0, html = "";
+  for (const q of Q) {
+    if (q.length === 1) { html += `<h2 class="eyebrow secthead">${esc(q[0])}</h2>`; continue; }
+    const [id, type, title, choices, other, required = true, hint] = q;
+    n++;
+    html += `<div class="card" data-id="${id}" data-type="${type}" data-required="${required}">`;
+    html += `<h3>${n}. ${esc(title)}${required ? "" : '<span class="opt">optional</span>'}</h3>`;
+    if (type === "any") html += `<p class="hint">Pick any that apply.</p>`;
+    if (hint) html += `<p class="hint">${esc(hint)}</p>`;
+    if (choices) {
+      const input = type === "any" ? "checkbox" : "radio";
+      html += `<div class="choices">` + choices.map(c =>
+        `<label class="choice"><input type="${input}" name="e${id}" value="${esc(c)}"><span>${esc(c)}</span></label>`).join("");
+      if (other) html += `<label class="choice"><input type="${input}" name="e${id}" value="__other_option__"><span>Other</span></label>`;
+      html += `</div>`;
+      if (other) html += `<input class="other-text" type="text" name="o${id}" placeholder="Other: tell us" maxlength="300">`;
+    } else if (type === "long") {
+      html += `<textarea name="e${id}" maxlength="2000" placeholder="Optional"></textarea>`;
+    } else {
+      html += `<input type="email" name="e${id}" autocomplete="email" placeholder="you@example.com" maxlength="200">`;
+    }
+    html += `</div>`;
+  }
+  html += `<div class="submitrow"><button class="btn primary" type="submit" style="border:0;cursor:pointer;font:inherit;font-weight:600">Send my answers</button>
+    <span class="muted" id="status">Anonymous. Nothing is saved on this page.</span></div>`;
+  form.innerHTML = html;
+  const cards = [...form.querySelectorAll(".card")];
+  const required = cards.filter(c => c.dataset.required === "true");
+  const answered = c => c.querySelector("input:checked") !== null;
+  const bar = document.getElementById("bar");
+  form.addEventListener("change", e => {
+    const card = e.target.closest(".card");
+    if (!card) return;
+    const box = card.querySelector(".other-text");
+    if (box) box.classList.toggle("on", !!card.querySelector('input[value="__other_option__"]:checked'));
+    if (answered(card)) card.classList.remove("missing");
+    bar.style.width = Math.round(required.filter(answered).length / required.length * 100) + "%";
+  });
+  const status = document.getElementById("status");
+  form.addEventListener("submit", async e => {
+    e.preventDefault();
+    const missing = required.filter(c => !answered(c));
+    missing.forEach(c => c.classList.add("missing"));
+    if (missing.length) {
+      missing[0].scrollIntoView({ behavior: "smooth", block: "center" });
+      status.textContent = missing.length === 1 ? "One question still needs an answer." : `${missing.length} questions still need an answer.`;
+      return;
+    }
+    const body = new URLSearchParams();
+    for (const c of cards) {
+      const id = c.dataset.id;
+      c.querySelectorAll("input:checked").forEach(i => body.append(`entry.${id}`, i.value));
+      const other = c.querySelector(".other-text");
+      if (other && c.querySelector('input[value="__other_option__"]:checked'))
+        body.append(`entry.${id}.other_option_response`, other.value.trim() || "Other");
+      const text = c.querySelector("textarea, input[type=email]");
+      if (text && text.value.trim()) body.append(`entry.${id}`, text.value.trim());
+    }
+    const btn = form.querySelector("button");
+    btn.disabled = true; status.textContent = "Sending…";
+    try {
+      // Google Forms doesn't send CORS headers, so the reply can't be read; a network failure still throws.
+      await fetch(POST, { method: "POST", mode: "no-cors", body });
+      form.hidden = true;
+      document.getElementById("done").hidden = false;
+      bar.style.width = "100%";
+      scrollTo({ top: 0, behavior: "smooth" });
+    } catch {
+      btn.disabled = false;
+      status.innerHTML = `Couldn't send. Check your connection and try again, or <a href="${FORM}">use the Google Form</a>.`;
+    }
+  });
+})();
+</script>
+<script>(() => {
+  const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  // Reveal cards, headings, phones and steps as they scroll into view.
+  const items = document.querySelectorAll("section .card, section h2, section .phone, .step, .table, .grouphead");
+  if (!reduce && "IntersectionObserver" in window) {
+    const io = new IntersectionObserver(es => es.forEach(e => {
+      if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); }
+    }), { threshold: 0.12, rootMargin: "0px 0px -40px 0px" });
+    items.forEach((el, i) => {
+      el.classList.add("reveal");
+      // Stagger siblings in a grid.
+      const idx = Array.prototype.indexOf.call(el.parentElement.children, el);
+      el.style.transitionDelay = Math.min(idx, 6) * 70 + "ms";
+      io.observe(el);
+    });
+  }
+  // Nav shadow after scrolling.
+  const nav = document.querySelector("nav.top");
+  const onScroll = () => nav && nav.classList.toggle("scrolled", scrollY > 20);
+  addEventListener("scroll", onScroll, { passive: true }); onScroll();
+  // Live countdowns: <span data-countdown="402"> shows m:ss and loops.
+  document.querySelectorAll("[data-countdown]").forEach(el => {
+    const start = +el.dataset.countdown; let s = start;
+    const show = () => { el.textContent = Math.floor(s / 60) + ":" + String(s % 60).padStart(2, "0"); };
+    show(); if (!reduce) setInterval(() => { s = s > 0 ? s - 1 : start; show(); }, 1000);
+  });
+  // Rotating words: <span class="rotate" data-words="Days,Swings,Nights">.
+  document.querySelectorAll(".rotate[data-words]").forEach(el => {
+    const words = el.dataset.words.split(","); let i = 0;
+    const show = () => { el.innerHTML = '<span class="w">' + words[i] + "</span>"; };
+    show(); if (!reduce) setInterval(() => { i = (i + 1) % words.length; show(); }, 2200);
+  });
+  // Typed text: <span class="typed" data-text="RUN_BEDTIME">.
+  document.querySelectorAll(".typed[data-text]").forEach(el => {
+    const t = el.dataset.text; let n = 0, dir = 1;
+    if (reduce) { el.textContent = t; return; }
+    setInterval(() => {
+      n += dir; if (n >= t.length + 8) dir = -1; if (n <= 0) dir = 1;
+      el.textContent = t.slice(0, Math.max(0, Math.min(n, t.length)));
+    }, 110);
+  });
+  // Clock that shows the real time in a phone.
+  document.querySelectorAll("[data-clock]").forEach(el => {
+    const tick = () => { const d = new Date(); el.textContent = d.getHours() + ":" + String(d.getMinutes()).padStart(2, "0"); };
+    tick(); setInterval(tick, 15000);
+  });
+})();
+</script>
+</body>
+</html>
