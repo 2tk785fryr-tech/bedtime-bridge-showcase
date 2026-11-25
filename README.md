@@ -68,8 +68,8 @@ Pick how the app works with your house:
 
 Set it up once and forget it:
 
-- **A Focus filter:** when Sleep Focus turns on at bedtime, the app plans tomorrow and sets your
-  alarms. Nothing to remember, and it works even if you swiped the app away.
+- **A Focus filter (recommended):** when Sleep Focus turns on at bedtime, the app plans tomorrow
+  and sets your alarms. Nothing to remember, and it works even if you swiped the app away.
 - **A shortcut:** at a time you choose, and it can dim the lights or play music at the same
   time.
 - **Yourself, from the app:** one tap.
@@ -82,7 +82,9 @@ Whichever you choose, the next 2 mornings are always set ahead as a safety net.
 
 ## Getting you up
 
-- **An alarm series, not one alarm.** Several alarms a few minutes apart, as many as you like.
+- **One alarm is enough for most people.** Stopping an alarm takes a slide, so it's hard to turn
+  off by accident, and backstops follow if you're not up. Heavy sleeper, or you tend to turn an
+  alarm off and fall back asleep? Add a second or third alarm in Settings.
 - **Real alarms.** They ring through Silent mode and Focus, on the Lock Screen and the Dynamic
   Island.
 - **Snooze with a countdown** you can see on the Lock Screen.
