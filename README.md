@@ -1,4 +1,5 @@
-> 🌐 **[See the website](https://2tk785fryr-tech.github.io/bedtime-bridge-showcase/)**
+<!-- DRAFT for review (v0.5.4 item 36). Goes to bedtime-bridge-showcase as README.md once the owner OKs it.
+     📷 marks a screenshot (dark mode, nothing personal showing); images go in images/ in that repo. -->
 
 <p align="center">
   📷 <i>App icon</i>
@@ -9,7 +10,8 @@
 <p align="center"><b>Up on time, every time.</b></p>
 
 <p align="center">
-Your shifts are already in your calendar. Bedtime Bridge reads them and sets your wake-up
+For regular schedules, shifts and everything in between. Bedtime Bridge reads your work schedule
+from your calendar, or from your week or rotation if you don't keep one, and sets your wake-up
 alarms every night, then makes sure you actually get up.
 </p>
 
@@ -25,9 +27,9 @@ alarms every night, then makes sure you actually get up.
 
 ## Who it's for
 
+- **Regular schedules:** a 9-to-5 most days, and it handles the exceptions for you: an early
+  appointment, a flight, a day off or a vacation, so you never set or cancel an alarm by hand.
 - **Shift workers** whose start time changes from day to day: days, swings, nights, rotations.
-- **Anyone whose wake-up isn't the same every morning:** appointments, flights, remote days,
-  days off.
 - **Heavy sleepers** who've slept through an alarm, or turned it off and fallen back asleep.
 
 You shouldn't have to remember to set an alarm, work out what time it needs to be, or hope you
@@ -39,8 +41,19 @@ heard it.
 
 ### 1. Your shifts
 
-Put your work schedule in Apple Calendar, the way you already do. Bedtime Bridge recognises each
-shift by its title ("Days", "Swings", "Nights") and gives each type its own wake-up:
+Tell the app when you work, whichever way suits you. No work calendar needed:
+
+- **My week:** the same days and hours each week.
+- **A rotation:** pick a ready-made shift pattern or build your own. Change crews from a date,
+  give a shift a flex time, and share your rotation with a coworker by link or QR code.
+- **Your calendar:** put your shifts in Apple Calendar the way you already do.
+- **An import:** your work's schedule from a file or a calendar link, kept in the app.
+
+Schedule kept in the app and want it on your calendar too? **Add to Apple Calendar** copies your workdays into a Work
+calendar. Move or delete a shift there and the app follows, with **Put it back** if you change your
+mind.
+
+Bedtime Bridge knows each shift type ("Days", "Swings", "Nights") and gives each its own wake-up:
 
 - **A fixed time** (always up at 4:30 for Days),
 - **a set time before the shift**, or
@@ -58,7 +71,7 @@ Pick how the app works with your house:
 
 | | |
 |---|---|
-| **Home Assistant** | The full setup. Home Assistant sets the alarms at bedtime, runs your wake-up and bedtime routines, and steps in with lights and speakers if you're still in bed when you should be up. |
+| **Home Assistant** | The full setup. Home Assistant sets the alarms at bedtime, runs your wake-up and bedtime routines, and steps in with lights and speakers if you're still in bed when you should be up. The backstops work with My week and rotations too. |
 | **Apple Home** | Your Home scenes run from the alarm buttons, and a snooze can fade the lights up. Backstops are written as Home automations on your home hub. |
 | **None** | Just the phone. Everything about alarms still works. |
 
@@ -77,6 +90,18 @@ Set it up once and forget it:
 Whichever you choose, the next 2 mornings are always set ahead as a safety net.
 
 📷 *Screenshot: the "How your alarms get set" choice*
+
+---
+
+## Your week, your way
+
+- **Coming up is your week.** Tap a day to change just that day: a day off, different hours, or
+  working from home.
+- **+ Leave and + Different hours** sit at the top, for a quick change.
+- **Skip until…** takes the alarms off for a few days, and you can undo it any time before then.
+- **An evening check:** if you turned off tomorrow's alarm and it's a workday, a notification at 8 PM reminds you.
+
+📷 *Screenshot: Coming up with the week*
 
 ---
 
@@ -127,10 +152,14 @@ Whichever you choose, the next 2 mornings are always set ahead as a safety net.
 - **Temporary alarms** for a one-off early start, without touching your plan.
 - **Military duty days** on a rotation, with muster times.
 - **Widgets, Live Activities, Control Center controls and Siri.**
+- **Trips:** times show in the time zone where they happen, the morning weather follows you, and a flight
+  shows once.
 - **Weekly summary** of the week ahead.
+- **History:** what happened each day: bed time, hours slept, alarms and snoozes.
+- **Briefings:** a short spoken morning and bedtime rundown.
+- **Settings grouped by what they're for:** waking up, your schedule, getting to work, going to
+  bed and your smart home. New setups start grouped; **Show all options** brings back the full list.
 - **Your clock, your icon:** 12- or 24-hour, and a choice of app icons.
-- **Coming next:** a History page (what happened each day, bed time and hours slept), morning
-  and bedtime briefings.
 
 📷 *Screenshot: widgets on the Home Screen*
 
@@ -138,8 +167,9 @@ Whichever you choose, the next 2 mornings are always set ahead as a safety net.
 
 ## Set up in minutes
 
-The app walks you through it: what it does, your shifts, your home, and how your alarms get set,
-with pictures for every step.
+A short setup walks you through your work schedule, your home and how your alarms get set, and
+the app asks for a permission only when a feature needs it. **See how it works** (a short
+walkthrough of a night and a morning) and a **Quick tour** of the main screens are in Settings.
 
 📷 *Screenshot: the first How to use page*
 
